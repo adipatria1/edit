@@ -1,9 +1,16 @@
+import os
+from pyvirtualdisplay import Display
 import tkinter as tk
 from tkinter import ttk, messagebox
 import random
 from video_processor import VideoProcessor
 from file_handler import FileHandler
 from ui_components import UIComponents
+
+# Jika tidak ada DISPLAY, jalankan virtual display
+if "DISPLAY" not in os.environ:
+    display = Display(visible=0, size=(1024, 768))
+    display.start()
 
 class MovieRecapEditor:
     def __init__(self, root):
@@ -79,8 +86,12 @@ class MovieRecapEditor:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         finally:
             self.progress['value'] = 0
-            
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = MovieRecapEditor(root)
     root.mainloop()
+    
+    # Jika menggunakan virtual display, hentikan setelah aplikasi ditutup
+    if "display" in globals():
+        display.stop()
